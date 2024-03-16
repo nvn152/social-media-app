@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    serverActions: true,
     serverComponentsExternalPackages: ["mongoose"],
   },
   images: {
@@ -21,6 +20,10 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "placehold.co",
+      },
+      {
+        protocol: "https",
+        hostname: "utfs.io",
       },
     ],
   },
