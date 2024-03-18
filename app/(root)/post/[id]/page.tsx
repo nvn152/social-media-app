@@ -3,6 +3,7 @@ import Comment from "@/components/forms/Comment";
 import { fetchPostById } from "@/lib/actions/post-action";
 import { fetchUser } from "@/lib/actions/user-action";
 import { currentUser } from "@clerk/nextjs";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 const Page = async ({ params }: { params: { id: string } }) => {
@@ -37,9 +38,26 @@ const Page = async ({ params }: { params: { id: string } }) => {
       <div className="mt-7 ">
         <Comment
           postId={post?.id}
-          currentUserImage={user?.imageUrl}
+          currentUserImage={userInfo?.image}
           currentUserId={JSON.stringify(userInfo._id)}
         />
+      </div>
+
+      <div className="mt-10">
+        {post?.children.map((childItem: any) => (
+          <PostCard
+            key={childItem._id}
+            id={childItem._id}
+            currentUserId={user?.id || ""}
+            parentId={childItem.parentId}
+            content={childItem.text}
+            author={childItem.author}
+            community={childItem.community}
+            createdAt={childItem.createdAt}
+            comments={childItem.children}
+            isComment={true}
+          />
+        ))}
       </div>
     </section>
   );
