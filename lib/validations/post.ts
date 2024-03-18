@@ -7,5 +7,4 @@ export const PostValidation = z.object({
 
 export const CommentValidation = z.object({
   post: z.string().min(1),
-  accountId: z.string(),
 });

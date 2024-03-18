@@ -36,8 +36,6 @@ const PostCard = ({
   comments,
   isComment = false,
 }: PostProps) => {
-  console.log(`Content: ${content}`);
-
   return (
     <article className="flex w-full flex-col rounded-xl bg-dark-2 p-7">
       <div className=" flex items-start justify-between">

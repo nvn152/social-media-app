@@ -78,3 +78,71 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
     console.log(error.message);
   }
 }
+
+export async function fetchPostById(id: string) {
+  try {
+    connectToDB();
+
+    const post = await Post.findById(id)
+      .populate({
+        path: "author",
+        model: User,
+        select: "_id id name parentId image",
+      })
+      .populate({
+        path: "children",
+        populate: [
+          { path: "author", model: User, select: "_id id name parentId image" },
+          {
+            path: "children",
+            model: Post,
+            populate: {
+              path: "author",
+              model: User,
+              select: "_id id name parentId image",
+            },
+          },
+        ],
+      })
+      .exec();
+
+    return post;
+  } catch (error: any) {
+    console.log(error.message);
+  }
+}
+
+export async function addCommentToPost(
+  postId: string,
+  comementText: string,
+  userId: string,
+  path: string
+) {
+  try {
+    connectToDB();
+
+    const originalPost = await Post.findById(postId);
+
+    if (!originalPost) {
+      throw new Error("Post not found");
+    }
+
+    const commentPost = new Post({
+      text: comementText,
+      author: userId,
+      // community: originalPost.community,
+      // path,
+      parentId: postId,
+    });
+
+    const savedCommentPost = await commentPost.save();
+
+    originalPost.children.push(savedCommentPost._id);
+
+    await originalPost.save();
+
+    revalidatePath(path);
+  } catch (error) {
+    console.error(error);
+  }
+}
