@@ -24,6 +24,7 @@ import { updateUser } from "@/lib/actions/user-action";
 import { usePathname, useRouter } from "next/navigation";
 import { PostValidation } from "@/lib/validations/post";
 import { createPost } from "@/lib/actions/post-action";
+import { useOrganization } from "@clerk/nextjs";
 
 interface Props {
   user: {
@@ -40,6 +41,7 @@ interface Props {
 function PostForm({ userId }: { userId: string }) {
   const router = useRouter();
   const pathname = usePathname();
+  const { organization } = useOrganization();
 
   const form = useForm<z.infer<typeof PostValidation>>({
     resolver: zodResolver(PostValidation),
@@ -50,10 +52,14 @@ function PostForm({ userId }: { userId: string }) {
   });
 
   const onSubmit = async (values: z.infer<typeof PostValidation>) => {
+    console.log(organization);
+
+    if (!organization) {
+    }
     await createPost({
       text: values.post,
       author: userId,
-      commuintyId: null,
+      communityId: organization ? organization?.id : null,
       path: pathname,
     });
 

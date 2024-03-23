@@ -1,3 +1,4 @@
+import { formatDateString } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -115,6 +116,28 @@ const PostCard = ({
             </div>
           </div>
         </div>
+
+        {/* Delete post */}
+        {/* Show comment profile logos */}
+
+        {isComment && community && (
+          <Link
+            className="mt-5 flex items-center"
+            href={`/communities/${community.id}`}
+          >
+            <p className="text-subtle-medium text-gray-1">
+              {formatDateString(createdAt)}- {community.name} community
+            </p>
+
+            <Image
+              src={community.image}
+              alt="Community Image"
+              width={14}
+              height={14}
+              className="ml-1 rounded-full object-cover"
+            />
+          </Link>
+        )}
       </div>
     </article>
   );
