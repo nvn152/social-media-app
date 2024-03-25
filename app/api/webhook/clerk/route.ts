@@ -48,8 +48,6 @@ export const POST = async (request: Request) => {
   // After adding the endpoint, you'll see the secret on the right side.
   const wh = new Webhook(process.env.NEXT_CLERK_WEBHOOK_SECRET || "");
 
-  console.log(`wh: ${wh}`);
-
   let evnt: Event | null = null;
 
   try {
@@ -64,7 +62,6 @@ export const POST = async (request: Request) => {
   const eventType: EventType = evnt?.type!;
 
   // Listen organization creation event
-
   if (eventType === "organization.created") {
     // Resource: https://clerk.com/docs/reference/backend-api/tag/Organizations#operation/CreateOrganization
     // Show what evnt?.data sends from above resource
@@ -82,8 +79,6 @@ export const POST = async (request: Request) => {
         "org bio",
         created_by
       );
-
-      console.log("creating community");
 
       return NextResponse.json({ message: "User created" }, { status: 201 });
     } catch (err) {

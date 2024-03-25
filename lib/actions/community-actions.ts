@@ -3,10 +3,11 @@
 import { FilterQuery, SortOrder } from "mongoose";
 
 import Community from "../models/community-model";
-import Post from "../models/post-model";
+
 import User from "../models/user-model";
 
 import { connectToDB } from "../mongoose";
+import Post from "../models/post-model";
 
 export async function createCommunity(
   id: string,
@@ -282,6 +283,7 @@ export async function deleteCommunity(communityId: string) {
       throw new Error("Community not found");
     }
 
+    // Delete all posts associated with the community
     await Post.deleteMany({ community: communityId });
 
     // Find all users who are part of the community
